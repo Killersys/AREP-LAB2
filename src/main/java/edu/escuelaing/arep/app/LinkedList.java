@@ -16,8 +16,7 @@ public class LinkedList {
 		
 		this.first = null;
 		this.last = null;
-		this.size = 0;
-	}
+		this.size = 0;}
 	
 	/**
 	 * Adiciona un nodo al final de la lista
@@ -32,8 +31,7 @@ public class LinkedList {
 			node.setHead(last);
 			last = node;
 		}
-		this.size += 1;
-	}
+		this.size += 1;}
 	
 	/**
 	 * Retorna el nodo siguiente de un nodo dado
@@ -41,8 +39,7 @@ public class LinkedList {
 	 * @return nodo sigueinte al dado
 	 */
 	public Node Next(Node actualNode) {
-		return actualNode.getTail();
-	}
+		return actualNode.getTail();}
 	
 	/**
 	 * Retorna el nodo anterior a un nodo dado
@@ -53,33 +50,27 @@ public class LinkedList {
 		
 		if (actualNode.getHead() == null) {
 			System.out.println("previous Node not exist");
-			return null;
-		} else {
-			return actualNode.getHead();
-		}
-	}
+			return null;} 
+		else {
+			return actualNode.getHead();}}
 	
 	/**
 	 * Retorna el primer nodo de la lista
 	 * @return fist
 	 */
 	public Node getFirst() {
-		return first;
-	}
+		return first;}
 	
 	/**
 	 * Retona el ultimo nodo de la lista
 	 * @return Node
 	 */
 	public Node getLast() {
-		return last;
-	}
+		return last;}
 	
 	/**
 	 * Retorna el tamaño de la lista
 	 * @return size (tamaño de la lista)
 	 */
 	public int getSize() {
-		return size;
-	}
-}
+		return size;}}

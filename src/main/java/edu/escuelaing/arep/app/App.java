@@ -1,62 +1,42 @@
 package edu.escuelaing.arep.app;
 
-import java.io.*;
+import static spark.Spark.*;
+
+
 /**
- * @author Jairo
- * Clase principal de lectura de archivos y impresion de los datos calculados
- *
+ @author Jairo Pulido
+ 
+ *Clase principal de lectura de archivos y impresion de los datos calculados
+ 
  */
 public class App {
 	/**
-	 * Imprime los datos calculador y especifica que archivos leer para el respectivo calculo
-	 * @param args argumentos
+	 * Encargada de iniciar el servicio usando spark
+	 * @param argv parametros al momento de iniciar la aplicación
 	 */
-    public static void main( String[] args ) {
-    	App app = new App();
-    	LinkedList list1 = app.Reader("table1/column1.txt");
-    	LinkedList list2 = app.Reader("table1/column2.txt");
-    	
-    	Calculator point1 = new Calculator(list1);
-    	Calculator point2 = new Calculator(list2);
-    	
-    	System.out.println("Table 1: Column 1, Mean: " + point1.Mean() + " | " + "Standard deviation: " + point1.Dev());
-    	System.out.println("Table 1: Column 2, Mean: " + point2.Mean() + " | " + "Standard deviation: " + point2.Dev());
-    	 
-    	
-    }
+    public static void main(String [] argv){
+
+        staticFiles.location("/public");
+        port(getPort());
+		post("/calculator", (request, response) -> {
+			LinkedList list = new LinkedList();
+			Double list2[] = new Double[] {};
+			String req = request.body(); //String en formato json			
+			String[] json = req.replace("\"", "").replace("[", "").replace("]", "").split(",");			
+			for (int i = 0; i < json.length; i++) {
+				double value = Double.parseDouble(json[i]);
+				list.Add(value);}
+			
+			Calculator cal = new Calculator(list);
+				
+			return "{\"mean\":" + cal.Mean() + ", \"dev\":" + cal.Dev() + "}";});}
     
-    /**
-     * Lee los valores de un archivo dada una ruta especifica y crea la lista doblemente encadenada con los valores del archivo
-     * @param path es la ruta del archivo
-     * @return la lista doblemente encadenada con los datos
+	/**
+     * Da el puerto solicitado por la aplicación
+     * @return puerto
      */
-    public LinkedList Reader (String path) {
-    	File file = null;
-    	FileReader fileReader = null;
-    	BufferedReader bufferedReader = null;
-    	LinkedList list = new LinkedList();
-    	
-    	try {
-    		file = new File(path);
-    		fileReader = new FileReader(file);
-    		bufferedReader = new BufferedReader(fileReader);
-    		
-    		String line;
-    		while ((line = bufferedReader.readLine()) != null) {
-    			double date = Double.parseDouble(line);
-    			list.Add(date);
-    		}
-    	} catch(Exception e) {
-    		e.printStackTrace();
-    	} finally {
-    		try {
-    			if(null != fileReader) {
-    				fileReader.close();
-    			}
-    		} catch (Exception e2) {
-    			e2.printStackTrace();
-    		}
-    	}
-    	return list;
-    }
+	static int getPort() {
+		 if (System.getenv("PORT") != null) {
+			 return Integer.parseInt(System.getenv("PORT"));}
+		 return 4567;}
 }
